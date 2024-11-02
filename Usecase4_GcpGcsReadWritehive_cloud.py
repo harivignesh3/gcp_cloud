@@ -24,7 +24,7 @@ def main():
                               StructField("custlname", StringType(), True),
                               StructField("custage", ShortType(), True),
                               StructField("custprofession", StringType(), True)])
-   gcs_df = spark.read.csv("gs://inceptez-common-bucket/dataset/custs",mode='dropmalformed',schema=custstructtype1)
+   gcs_df = spark.read.csv("gs://we43-learn1-hari/dataset/custs",mode='dropmalformed',schema=custstructtype1)
    gcs_df.show(10)
    print("GCS Read Completed Successfully")
    gcs_df.write.mode("overwrite").partitionBy("custage").saveAsTable("default.cust_info_gcs")
@@ -34,14 +34,14 @@ def main():
    gcs_df=spark.read.table("default.cust_info_gcs")
    curts = spark.createDataFrame([1], IntegerType()).withColumn("curts", current_timestamp()).select(date_format(col("curts"), "yyyyMMddHHmmSS")).first()[0]
    print(curts)
-   gcs_df.repartition(2).write.json("gs://inceptez-common-bucket/dataset/cust_output_json_"+curts)
+   gcs_df.repartition(2).write.json("gs://we43-learn1-hari/dataset/cust_output_json_"+curts)
    print("gcs Write Completed Successfully")
 
    print("Hive to GCS usecase starts here")
    gcs_df=spark.read.table("default.cust_info_gcs")
    curts = spark.createDataFrame([1], IntegerType()).withColumn("curts", current_timestamp()).select(date_format(col("curts"), "yyyyMMddHHmmSS")).first()[0]
    print(curts)
-   gcs_df.repartition(2).write.mode("overwrite").csv("gs://inceptez-common-bucket/dataset/cust_csv")
+   gcs_df.repartition(2).write.mode("overwrite").csv("gs://we43-learn1-hari/dataset/cust_csv")
    print("gcs Write Completed Successfully")
 
 main()
